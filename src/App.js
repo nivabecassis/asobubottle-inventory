@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import { get } from "./web/ajax";
 import Products from "./components/Products";
+import Header from "./components/Header";
 
 class App extends React.Component {
   state = {
@@ -12,9 +13,7 @@ class App extends React.Component {
   localhostUrl = "https://localhost:44342";
 
   componentDidMount = () => {
-    // if (!this.state.products) {
     this.getProducts();
-    // }
   };
 
   getProducts = () => {
@@ -36,9 +35,12 @@ class App extends React.Component {
   showProductList = () => {
     if (!this.state.products) return null;
     return (
-      <div className="container">
-        <Products products={this.state.products} />
-      </div>
+      <React.Fragment>
+        <Header />
+        <div className="container">
+          <Products products={this.state.products} />
+        </div>
+      </React.Fragment>
     );
   };
 
