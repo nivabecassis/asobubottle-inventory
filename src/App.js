@@ -1,18 +1,15 @@
-import { get } from "./web/ajax";
 import React from "react";
 import "./App.css";
+import { get } from "./web/ajax";
+import Products from "./components/Products";
 
 const localhostUrl = "https://localhost:44342";
-const prodUrl = "https://services.adnart.com:8443/api";
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoaded: false,
-      products: [],
-    };
-  }
+  state = {
+    isLoaded: false,
+    products: [],
+  };
 
   componentDidMount() {
     this.getProducts();
@@ -24,8 +21,9 @@ class App extends React.Component {
       (result) => {
         this.setState({
           isLoaded: true,
-          products: result.products,
+          products: result.data.products,
         });
+        console.log(result);
       },
       (error) => {
         this.setState({ isLoaded: false });
@@ -35,7 +33,11 @@ class App extends React.Component {
   }
 
   render() {
-    return <div className="App"></div>;
+    return (
+      <div className="App">
+        <Products />
+      </div>
+    );
   }
 }
 
