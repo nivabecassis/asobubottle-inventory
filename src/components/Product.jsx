@@ -5,9 +5,15 @@ export class Product extends React.Component {
     const product = this.props.product;
     console.log(product);
     return (
-      <div>
-        <img src={product.image.src} alt={product.image.alt}></img>
-        <h3>{product.title}</h3>
+      <div className="card">
+        <img
+          className="card-img-top img-fluid"
+          src={product.image.src}
+          alt={product.image.alt}
+        ></img>
+        <div className="card-body">
+          <h4 className="card-title">{product.title}</h4>
+        </div>
       </div>
     );
   }

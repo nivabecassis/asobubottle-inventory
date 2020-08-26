@@ -35,7 +35,11 @@ class App extends React.Component {
 
   showProductList = () => {
     if (!this.state.products) return null;
-    return <Products products={this.state.products} />;
+    return (
+      <div className="container">
+        <Products products={this.state.products} />
+      </div>
+    );
   };
 
   render() {
