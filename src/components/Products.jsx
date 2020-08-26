@@ -7,7 +7,7 @@ class Products extends Component {
     const productList = products.map((item) => {
       return <Product key={item.id} product={item} />;
     });
-    return <div className="card-deck">{productList}</div>;
+    return <div className="row">{productList}</div>;
   }
 }
 

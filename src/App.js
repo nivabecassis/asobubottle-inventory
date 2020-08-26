@@ -36,10 +36,14 @@ class App extends React.Component {
     if (!this.state.products) return null;
     return (
       <React.Fragment>
-        <Header />
-        <div className="container">
-          <Products products={this.state.products} />
-        </div>
+        <header>
+          <Header />
+        </header>
+        <main role="main">
+          <div className="container-lg">
+            <Products products={this.state.products} />
+          </div>
+        </main>
       </React.Fragment>
     );
   };
