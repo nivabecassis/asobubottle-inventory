@@ -3,41 +3,43 @@ import "./App.css";
 import { get } from "./web/ajax";
 import Products from "./components/Products";
 
-const localhostUrl = "https://localhost:44342";
-
 class App extends React.Component {
   state = {
     isLoaded: false,
     products: [],
   };
 
-  componentDidMount() {
-    this.getProducts();
-  }
+  localhostUrl = "https://localhost:44342";
 
-  getProducts() {
+  componentDidMount = () => {
+    // if (!this.state.products) {
+    this.getProducts();
+    // }
+  };
+
+  getProducts = () => {
     get(
-      localhostUrl + "/products/",
+      this.localhostUrl + "/products/",
       (result) => {
         this.setState({
           isLoaded: true,
           products: result.data.products,
         });
-        console.log(result);
       },
       (error) => {
         this.setState({ isLoaded: false });
         console.error(error);
       }
     );
-  }
+  };
+
+  showProductList = () => {
+    if (!this.state.products) return null;
+    return <Products products={this.state.products} />;
+  };
 
   render() {
-    return (
-      <div className="App">
-        <Products />
-      </div>
-    );
+    return <div className="App">{this.showProductList()}</div>;
   }
 }
 
