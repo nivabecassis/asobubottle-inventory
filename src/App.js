@@ -4,6 +4,7 @@ import { get } from "./web/ajax";
 import Products from "./components/Products";
 import Header from "./components/Header";
 import ProductPage from "./components/ProductPage";
+import NoProducts from "./components/NoProducts";
 
 import { Route, Switch } from "react-router-dom";
 
@@ -12,6 +13,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       isLoaded: false,
+      isError: false,
       products: [],
       selectedProduct: null,
     };
@@ -28,12 +30,13 @@ class App extends React.Component {
       (result) => {
         this.setState({
           isLoaded: true,
+          isError: false,
           products: result.data.products,
         });
         console.log(this.state.products);
       },
       (error) => {
-        this.setState({ isLoaded: false });
+        this.setState({ isLoaded: true, isError: true });
         console.error(error);
       }
     );
@@ -47,9 +50,29 @@ class App extends React.Component {
     this.setState({ selectedProduct });
   };
 
+  getPageContent = () => {
+    const { isLoaded, isError, products } = this.state;
+    if (!isLoaded && !isError) {
+      // No error, still loading
+      // TODO - Add a loading icon while the products come in
+    } else if (isLoaded && isError) {
+      // Error - tell the user
+      return <NoProducts />;
+    } else {
+      // Show the products
+      return (
+        <div>
+          <h3 className="text-left px-3 pb-4">Products</h3>
+          <Products
+            products={products}
+            onDetailsPage={this.handleDetailsPage}
+          />
+        </div>
+      );
+    }
+  };
+
   showProductList = () => {
-    if (!this.state.products) return null;
-    // TODO - Add a loading icon while the products come in
     return (
       <React.Fragment>
         <Switch>
@@ -61,13 +84,7 @@ class App extends React.Component {
               <Header />
             </header>
             <main role="main">
-              <div className="container-xl py-4">
-                <h3 className="text-left px-3 pb-4">Products</h3>
-                <Products
-                  products={this.state.products}
-                  onDetailsPage={this.handleDetailsPage}
-                />
-              </div>
+              <div className="container-xl py-4">{this.getPageContent()}</div>
             </main>
           </Route>
         </Switch>
