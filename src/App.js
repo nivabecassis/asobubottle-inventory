@@ -24,6 +24,7 @@ class App extends React.Component {
           isLoaded: true,
           products: result.data.products,
         });
+        console.log(this.state.products);
       },
       (error) => {
         this.setState({ isLoaded: false });

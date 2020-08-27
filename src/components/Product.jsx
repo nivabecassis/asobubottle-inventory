@@ -1,6 +1,29 @@
 import React from "react";
+import ProductColors from "./ProductColors";
 
 export class Product extends React.Component {
+  getColorsLayout = () => {
+    const product = this.props.product;
+    if (product.options) {
+      // Find the option that holds the colors
+      const colorsOption = product.options.find(
+        (option) => option.name.toUpperCase() === "COLOR"
+      );
+
+      // Select the colors array
+      if (colorsOption && colorsOption.values) {
+        const colors = [...colorsOption.values];
+        return (
+          <div className="card-footer bg-transparent">
+            <ProductColors colors={colors} />
+          </div>
+        );
+      }
+    }
+
+    return null;
+  };
+
   render() {
     const product = this.props.product;
     return (
@@ -14,6 +37,7 @@ export class Product extends React.Component {
           <div className="card-body">
             <h4 className="card-title">{product.title}</h4>
           </div>
+          {this.getColorsLayout()}
         </div>
       </div>
     );
