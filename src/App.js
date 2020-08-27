@@ -40,7 +40,8 @@ class App extends React.Component {
           <Header />
         </header>
         <main role="main">
-          <div className="container-lg">
+          <div className="container-xl py-4">
+            <h3 className="text-left px-3 pb-4">Products</h3>
             <Products products={this.state.products} />
           </div>
         </main>

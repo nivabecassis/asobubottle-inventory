@@ -4,8 +4,8 @@ export class Product extends React.Component {
   render() {
     const product = this.props.product;
     return (
-      <div className="col-md-3">
-        <div className="card mb-4 shadow-sm">
+      <div className="col mb-4">
+        <div className="card mb-4 shadow-sm h-100">
           <img
             className="card-img-top img-fluid"
             src={product.image.src}

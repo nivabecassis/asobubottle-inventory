@@ -7,7 +7,7 @@ class Products extends Component {
     const productList = products.map((item) => {
       return <Product key={item.id} product={item} />;
     });
-    return <div className="row">{productList}</div>;
+    return <div className="row row-cols-sm-2 row-cols-md-4">{productList}</div>;
   }
 }
 
