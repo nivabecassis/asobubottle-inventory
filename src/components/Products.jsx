@@ -3,9 +3,11 @@ import Product from "./Product";
 
 class Products extends Component {
   render() {
-    const products = this.props.products;
+    const { products, onDetailsPage } = this.props;
     const productList = products.map((item) => {
-      return <Product key={item.id} product={item} />;
+      return (
+        <Product key={item.id} product={item} onDetailsPage={onDetailsPage} />
+      );
     });
     return <div className="row row-cols-sm-2 row-cols-md-4">{productList}</div>;
   }
