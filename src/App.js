@@ -4,7 +4,7 @@ import { get } from "./web/ajax";
 import Products from "./components/Products";
 import Header from "./components/Header";
 import ProductPage from "./components/ProductPage";
-import NoProducts from "./components/NoProducts";
+import PageError from "./components/PageError";
 
 import { Route, Switch } from "react-router-dom";
 
@@ -53,11 +53,10 @@ class App extends React.Component {
   getPageContent = () => {
     const { isLoaded, isError, products } = this.state;
     if (!isLoaded && !isError) {
-      // No error, still loading
       // TODO - Add a loading icon while the products come in
     } else if (isLoaded && isError) {
       // Error - tell the user
-      return <NoProducts />;
+      return <PageError content="Couldn't load products from server" />;
     } else {
       // Show the products
       return (
@@ -72,22 +71,32 @@ class App extends React.Component {
     }
   };
 
+  getSelectedProductPage = () => {
+    const { isError, selectedProduct, products } = this.state;
+    if (isError || !products) {
+      return <PageError content="Couldn't load products from server" />;
+    } else if (products && !selectedProduct) {
+      // Product doesn't exist
+      return <PageError content="Product doesn't exist" />;
+    } else if (products && selectedProduct) {
+      return <ProductPage product={this.state.selectedProduct} />;
+    }
+  };
+
   showProductList = () => {
     return (
       <React.Fragment>
-        <Switch>
-          <Route path="/:id">
-            <ProductPage product={this.state.selectedProduct} />
-          </Route>
-          <Route path="/">
-            <header>
-              <Header />
-            </header>
-            <main role="main">
-              <div className="container-xl py-4">{this.getPageContent()}</div>
-            </main>
-          </Route>
-        </Switch>
+        <header>
+          <Header />
+        </header>
+        <div className="container-xl py-4">
+          <Switch>
+            <Route path="/:id">{this.getSelectedProductPage()}</Route>
+            <Route path="/">
+              <main role="main">{this.getPageContent()}</main>
+            </Route>
+          </Switch>
+        </div>
       </React.Fragment>
     );
   };
