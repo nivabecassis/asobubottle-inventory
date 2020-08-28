@@ -1,15 +1,14 @@
-import Axios from "axios";
-
 /**
- * Makes a get request with the specified configuration
+ * Makes an AJAX request with the specified configuration
  * @param {string} url Url to call
- * @param {Function} success Success callback
- * @param {Function} failure Failure callback
- * @param {Object} config Any configs to pass to axios
  */
-export async function get(url, success, failure, config) {
-  Axios.get(url, config).then(
-    (result) => success(result),
-    (error) => failure(error)
-  );
+export async function get(url) {
+  const response = await fetch(url, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return await response.json();
 }

@@ -26,11 +26,11 @@ export class Product extends React.Component {
   };
 
   render() {
-    const { product, onDetailsPage } = this.props;
+    const { product } = this.props;
     return (
       <div className="col mb-4">
         <div className="card mb-4 shadow-sm h-100">
-          <Link to={"/" + product.id} onClick={() => onDetailsPage(product.id)}>
+          <Link to={"/" + product.id}>
             <img
               className="card-img-top img-fluid"
               src={product.image.src}

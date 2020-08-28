@@ -7,7 +7,7 @@ class PageError extends Component {
       this.props.content ||
       "Something went wrong :( \n Please report this issue";
     return (
-      <div class="alert alert-danger">
+      <div className="alert alert-danger">
         <h4 className="alert-heading">{heading}</h4>
         <p>{content}</p>
       </div>
