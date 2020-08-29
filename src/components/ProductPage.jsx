@@ -22,23 +22,24 @@ class ProductPage extends Component {
     const baseUrl = "https://localhost:44342";
     const id = this.props.match.params.id;
 
-    // Get the product details
-    let product = await get(`${baseUrl}/products/${id}`);
-    if (!product) {
-      this.setState({ isError: true });
-      return;
-    }
-    product = product.products[0];
-    const sku = this.findSku(product);
+    try {
+      // Get the product details
+      let product = await get(`${baseUrl}/products/${id}`);
 
-    // Get the inventory for the defined sku
-    const inventory = await get(`${baseUrl}/inventory/${sku}`);
-    if (!inventory) {
+      product = product.products[0];
+      const sku = this.findSku(product);
+
+      // Get the inventory for the defined sku
+      const inventory = await get(`${baseUrl}/inventory/${sku}`);
+      if (!inventory) {
+        this.setState({ isError: true });
+      }
+
+      // Save all the info
+      this.setState({ product, sku, inventory, isLoaded: true });
+    } catch (err) {
       this.setState({ isError: true });
     }
-
-    // Save all the info
-    this.setState({ product, sku, inventory, isLoaded: true });
   };
 
   findSku = (product) => {
