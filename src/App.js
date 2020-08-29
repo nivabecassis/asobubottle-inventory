@@ -22,8 +22,7 @@ class App extends React.Component {
   };
 
   getProducts = async () => {
-    const url =
-      "https://localhost:44342/products/?fields=id,title,image,options";
+    const url = "https://localhost:44342/products/";
     const result = await get(url);
     if (result) {
       this.setState({ products: result.products });
