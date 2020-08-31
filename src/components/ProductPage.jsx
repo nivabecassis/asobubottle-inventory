@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { get } from "../web/ajax";
+import ProductImageCarousel from "./ProductImageCarousel";
 
 class ProductPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       product: null,
-      sku: null,
-      inventory: [],
       isLoaded: false,
       isError: false,
     };
@@ -25,65 +24,41 @@ class ProductPage extends Component {
     try {
       // Get the product details
       let product = await get(`${baseUrl}/products/${id}`);
-
       product = product.products[0];
-      const sku = this.findSku(product);
-
-      // Get the inventory for the defined sku
-      const inventory = await get(`${baseUrl}/inventory/${sku}`);
-      if (!inventory) {
-        this.setState({ isError: true });
-      }
-
-      // Save all the info
-      this.setState({ product, sku, inventory, isLoaded: true });
+      this.setState({ isLoaded: true, product });
     } catch (err) {
       this.setState({ isError: true });
     }
   };
 
-  findSku = (product) => {
-    if (product && product.variants) {
-      const definedSku = product.variants[0].sku;
-      if (definedSku) {
-        const indexOfSpace = definedSku.indexOf(" ");
-        if (!indexOfSpace) {
-          return definedSku;
-        }
-        return definedSku.substring(0, indexOfSpace);
-      }
-    }
-  };
-
   render() {
-    const { product, inventory, sku, isError, isLoaded } = this.state;
+    const { product, isError, isLoaded } = this.state;
     if (isError) {
       return <div className="error">Error</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
       return (
-        <div className="container-xl">
-          <Link to="/">
-            <button
-              type="button"
-              className="close float-left"
-              aria-label="close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </Link>
-          {/* <ProductImageCarousel product={product} /> */}
-          <div>
-            <h4>{product.title}</h4>
-            <p>{product.body_html}</p>
-            <p>...</p>
-            <img
-              height="200px"
-              width="200px"
-              src={product.image.src}
-              alt={product.image.alt}
-            ></img>
+        <div className="text-left">
+          <div className="mb-3">
+            <Link to="/">
+              <button
+                type="button"
+                className="btn btn-outline-primary"
+                aria-label="Return"
+              >
+                All products
+              </button>
+            </Link>
+          </div>
+          <div className="row">
+            <div className="col-md-6 order-md-1 mb-2">
+              <ProductImageCarousel product={product} />
+            </div>
+            <div className="col-md-6 order-md-2 mb-2">
+              <h3 className="mb-3">{product.title}</h3>
+              <p>{product.body_html}</p>
+            </div>
           </div>
         </div>
       );
