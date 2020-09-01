@@ -8,29 +8,31 @@ class Dropdown extends Component {
     };
   }
 
-  handleColorChange = (e) => {
+  handleOptionChange = (e) => {
+    this.props.onClick(e.target.innerText);
     this.setState({ selectedColor: e.target.innerText });
   };
 
   render() {
+    const { buttonId, options } = this.props;
     return (
       <div className="dropdown mb-2">
         <button
           className="btn btn-outline-primary dropdown-toggle"
           type="button"
-          id={this.props.buttonId}
+          id={buttonId}
           data-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"
         >
           {this.state.selectedColor}
         </button>
-        <div className="dropdown-menu" aria-labelledby={this.props.buttonId}>
-          {this.props.options.map((c) => {
+        <div className="dropdown-menu" aria-labelledby={buttonId}>
+          {options.map((c) => {
             return (
               <button
                 key={c}
-                onClick={this.handleColorChange}
+                onClick={this.handleOptionChange}
                 className="dropdown-item"
                 type="button"
               >
