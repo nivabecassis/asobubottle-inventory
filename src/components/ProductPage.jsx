@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import ReactHtmlParser from "react-html-parser";
 import { get } from "../web/ajax";
 import ProductImageCarousel from "./ProductImageCarousel";
 import Dropdown from "./Dropdown";
+import ProductInventory from "./ProductInventory";
 
 class ProductPage extends Component {
   constructor(props) {
@@ -68,8 +70,21 @@ class ProductPage extends Component {
     }
   };
 
+  getProductWeight = () => {
+    // Only show weight if it is provided
+    const { weight, weight_unit } = this.state.selectedVariant;
+    if (!weight) return null;
+
+    return (
+      <p>
+        Weight - {weight}&nbsp;
+        {weight_unit}
+      </p>
+    );
+  };
+
   render() {
-    const { product, isError, isLoaded, selectedVariant } = this.state;
+    const { product, isError, isLoaded } = this.state;
     if (isError) {
       return <div className="error">Error</div>;
     } else if (!isLoaded) {
@@ -96,15 +111,12 @@ class ProductPage extends Component {
             <div className="col-md-6 order-md-2 mb-2">
               <h3 className="mb-3">{product.title}</h3>
               {this.getProductColorsComponent()}
-              <p>{product.body_html}</p>
+              <div>
+                {ReactHtmlParser(product.body_html)}
+                {this.getProductWeight()}
+              </div>
               <hr />
-              <h4 className="mb-3">Product Details</h4>
-              <p>
-                Weight - {selectedVariant.weight}&nbsp;
-                {selectedVariant.weight_unit}
-              </p>
-              <hr />
-              {/* <ProductInventory/> */}
+              <ProductInventory product={product} type="primary" />
             </div>
           </div>
         </div>
