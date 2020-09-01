@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { get } from "../web/ajax";
 import ProductImageCarousel from "./ProductImageCarousel";
+import Dropdown from "./Dropdown";
 
 class ProductPage extends Component {
   constructor(props) {
@@ -31,6 +32,23 @@ class ProductPage extends Component {
     }
   };
 
+  getProductColorsComponent = () => {
+    const { product } = this.state;
+    if (product) {
+      const colorOptions = product.options.find((o) => o.name === "Color");
+      console.log("colorOptions", colorOptions);
+      if (colorOptions && colorOptions.values) {
+        return (
+          <Dropdown
+            options={colorOptions.values}
+            buttonId="dropdownMenuProductColors"
+          />
+        );
+      }
+    }
+    return null;
+  };
+
   render() {
     const { product, isError, isLoaded } = this.state;
     if (isError) {
@@ -57,6 +75,7 @@ class ProductPage extends Component {
             </div>
             <div className="col-md-6 order-md-2 mb-2">
               <h3 className="mb-3">{product.title}</h3>
+              {this.getProductColorsComponent()}
               <p>{product.body_html}</p>
             </div>
           </div>
