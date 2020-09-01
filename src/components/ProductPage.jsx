@@ -49,6 +49,9 @@ class ProductPage extends Component {
             options={colorOptions.values}
             buttonId="dropdownMenuProductColors"
             onClick={this.handleItemColorChange}
+            outline
+            type="primary"
+            label="Color"
           />
         );
       }
