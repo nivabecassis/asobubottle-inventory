@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { prepareInventoryDataForSingleDimensionTable } from "../utils/inventory";
 
 class ProductInventory extends Component {
   constructor(props) {
@@ -61,11 +62,9 @@ class ProductInventory extends Component {
   };
 
   getInventoryTableData = () => {
-    let shipmentsList = this.getSingleDimensionShipmentsList(
+    let shipmentsList = prepareInventoryDataForSingleDimensionTable(
       this.state.localeInventory
     );
-
-    shipmentsList = this.prepareDataForTable(shipmentsList);
 
     const shipmentsRows = shipmentsList.map((ship, index) => {
       return (
@@ -79,78 +78,6 @@ class ProductInventory extends Component {
     });
 
     return <tbody>{shipmentsRows}</tbody>;
-  };
-
-  getSingleDimensionShipmentsList = (localeInv) => {
-    // Creating a single dimension array for each shipment
-    // This can then be used to create the table in a single dimension
-    const shipmentsList = [];
-    localeInv.forEach((inv) => {
-      // No shipments on this inventory item
-      if (!inv.Shipments || inv.Shipments.length === 0) {
-        shipmentsList.push({
-          Color: inv.Color,
-          Quantity: inv.Quantity,
-          Ship_Eta: null,
-          Ship_Qty: null,
-        });
-      }
-
-      inv.Shipments.forEach((ship) => {
-        shipmentsList.push({
-          Color: inv.Color,
-          Quantity: inv.Quantity,
-          Ship_Eta: new Date(ship.Eta),
-          Ship_Qty: ship.Quantity,
-        });
-      });
-    });
-
-    return shipmentsList;
-  };
-
-  prepareDataForTable = (inventory) => {
-    let results = [];
-
-    // We are only keeping a single instance of the "complete" object
-    // Further instances should only contain the shipments details.
-    // As a result, the table gives the impression that the colors and
-    // on hand quantities are not repeated
-    inventory.forEach((item) => {
-      if (results.find((result) => result.Color === item.Color)) {
-        results.push({
-          Color: null,
-          Quantity: null,
-          Ship_Eta: item.Ship_Eta,
-          Ship_Qty: item.Ship_Qty,
-        });
-      } else {
-        results.push({ ...item });
-      }
-    });
-
-    return results;
-  };
-
-  listUpComingShipments = (inventory) => {
-    // Create a date object for the shipment
-    const shipments = inventory.Shipments.map((ship) => {
-      return { Eta: new Date(ship.Eta), Quantity: ship.Quantity };
-    });
-
-    // Sort the shipments based on ascending dates (earlier first)
-    const sortedShipments = shipments.sort((a, b) => a.Eta - b.Eta);
-
-    // Create an unordered list of upcoming shipments
-    const shipmentsList = sortedShipments.map((ship, index) => {
-      return (
-        <li
-          key={ship.Quantity + index}
-          className="list-group-item"
-        >{`${new Date(ship.Eta).toLocaleDateString()}: ${ship.Quantity}`}</li>
-      );
-    });
-    return <ul className="list-group list-group-flush">{shipmentsList}</ul>;
   };
 
   render() {
