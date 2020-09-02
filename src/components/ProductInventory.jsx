@@ -13,6 +13,7 @@ class ProductInventory extends Component {
   handleLocaleChange = (e) => {
     // There is a bug related to onChange that's why I'm adding this check
     const newValue = e.currentTarget.value;
+
     if (newValue !== this.state.selectedLocale) {
       // Find the matching inventory data that corresponds with the new locale
       const inventory = this.props.product.inventory.find(
@@ -60,17 +61,75 @@ class ProductInventory extends Component {
   };
 
   getInventoryTableData = () => {
-    const { localeInventory } = this.state;
-    const rows = localeInventory.map((i) => {
+    let shipmentsList = this.getSingleDimensionShipmentsList(
+      this.state.localeInventory
+    );
+
+    shipmentsList = this.prepareDataForTable(shipmentsList);
+
+    const shipmentsRows = shipmentsList.map((ship, index) => {
       return (
-        <tr key={i.Color}>
-          <td>{i.Color}</td>
-          <td>{i.Quantity}</td>
-          <td>{this.listUpComingShipments(i)}</td>
+        <tr key={ship.Color + index}>
+          <td>{ship.Color ? ship.Color : ""}</td>
+          <td>{ship.Quantity ? ship.Quantity : ""}</td>
+          <td>{ship.Ship_Eta ? ship.Ship_Eta.toLocaleDateString() : "-"}</td>
+          <td>{ship.Ship_Qty ? ship.Ship_Qty : "-"}</td>
         </tr>
       );
     });
-    return <tbody>{rows}</tbody>;
+
+    return <tbody>{shipmentsRows}</tbody>;
+  };
+
+  getSingleDimensionShipmentsList = (localeInv) => {
+    // Creating a single dimension array for each shipment
+    // This can then be used to create the table in a single dimension
+    const shipmentsList = [];
+    localeInv.forEach((inv) => {
+      // No shipments on this inventory item
+      if (!inv.Shipments || inv.Shipments.length === 0) {
+        shipmentsList.push({
+          Color: inv.Color,
+          Quantity: inv.Quantity,
+          Ship_Eta: null,
+          Ship_Qty: null,
+        });
+      }
+
+      inv.Shipments.forEach((ship) => {
+        shipmentsList.push({
+          Color: inv.Color,
+          Quantity: inv.Quantity,
+          Ship_Eta: new Date(ship.Eta),
+          Ship_Qty: ship.Quantity,
+        });
+      });
+    });
+
+    return shipmentsList;
+  };
+
+  prepareDataForTable = (inventory) => {
+    let results = [];
+
+    // We are only keeping a single instance of the "complete" object
+    // Further instances should only contain the shipments details.
+    // As a result, the table gives the impression that the colors and
+    // on hand quantities are not repeated
+    inventory.forEach((item) => {
+      if (results.find((result) => result.Color === item.Color)) {
+        results.push({
+          Color: null,
+          Quantity: null,
+          Ship_Eta: item.Ship_Eta,
+          Ship_Qty: item.Ship_Qty,
+        });
+      } else {
+        results.push({ ...item });
+      }
+    });
+
+    return results;
   };
 
   listUpComingShipments = (inventory) => {
@@ -105,8 +164,9 @@ class ProductInventory extends Component {
           <thead>
             <tr>
               <th scope="col">Color</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Upcoming shipments</th>
+              <th scope="col">On-Hand Quantity</th>
+              <th scope="col">Upcoming Shipments</th>
+              <th scope="col">Shipment Quantities</th>
             </tr>
           </thead>
           {this.getInventoryTableData()}
