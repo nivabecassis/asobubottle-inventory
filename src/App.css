@@ -28,6 +28,29 @@
   color: #61dafb;
 }
 
+ol.carousel-indicators li {
+  background-color: black;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none;
+}
+
+.carousel-control-next-icon:after {
+  content: ">";
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+}
+
+.carousel-control-prev-icon:after {
+  content: "<";
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
