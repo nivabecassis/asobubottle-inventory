@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { prepareInventoryDataForSingleDimensionTable } from "../utils/inventory";
+import {
+  flattenInventoryData,
+  calculateUpcomingShipments,
+  prepareDataForInventoryTable,
+} from "../utils/inventory";
 
 class ProductInventory extends Component {
   constructor(props) {
@@ -62,15 +66,22 @@ class ProductInventory extends Component {
   };
 
   getInventoryTableData = () => {
-    let shipmentsList = prepareInventoryDataForSingleDimensionTable(
-      this.state.localeInventory
-    );
+    const localeInventory = [...this.state.localeInventory];
+
+    // Adjust current stock with upcoming shipments
+    let shipmentsList = calculateUpcomingShipments(localeInventory);
+
+    // Make the data single dimension
+    shipmentsList = flattenInventoryData(shipmentsList);
+
+    // Remove duplicate colors and onHandQty
+    shipmentsList = prepareDataForInventoryTable(shipmentsList);
 
     const shipmentsRows = shipmentsList.map((ship, index) => {
       return (
         <tr key={ship.Color + index}>
-          <td>{ship.Color ? ship.Color : ""}</td>
-          <td>{ship.Quantity ? ship.Quantity : ""}</td>
+          <td>{ship.Color}</td>
+          <td>{ship.Quantity}</td>
           <td>{ship.Ship_Eta ? ship.Ship_Eta.toLocaleDateString() : "-"}</td>
           <td>{ship.Ship_Qty ? ship.Ship_Qty : "-"}</td>
         </tr>
