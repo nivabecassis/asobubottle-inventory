@@ -42,7 +42,6 @@ export const flattenInventoryData = (inventory) => {
  * @param {Object} invItem Inventory item for a single color
  */
 export const calculateUpcomingShipments = (inventory) => {
-  console.log(inventory);
   const results = [];
 
   inventory.forEach((inv) => {

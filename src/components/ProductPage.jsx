@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
 import { get } from "../web/ajax";
 import ProductImageCarousel from "./ProductImageCarousel";
-import Dropdown from "./Dropdown";
 import ProductInventory from "./ProductInventory";
+import ProductColorSelector from "./ProductColorSelector";
 
 class ProductPage extends Component {
   constructor(props) {
@@ -14,6 +14,7 @@ class ProductPage extends Component {
       isLoaded: false,
       isError: false,
       selectedVariant: null,
+      selectedImageIndex: 0,
     };
   }
 
@@ -39,35 +40,39 @@ class ProductPage extends Component {
     }
   };
 
-  getProductColorsComponent = () => {
+  getProductColors = () => {
     const { product } = this.state;
     if (product) {
       // Get the option that shows the colors
-      const colorOptions = product.options.find((o) => o.name === "Color");
-      if (colorOptions && colorOptions.values) {
-        return (
-          // Create the dropdown component with the specified colors
-          <Dropdown
-            options={colorOptions.values}
-            buttonId="dropdownMenuProductColors"
-            onClick={this.handleItemColorChange}
-            outline
-            type="primary"
-            label="Color"
-          />
-        );
+      const colorsOption = product.options.find((o) => o.name === "Color");
+      if (colorsOption) {
+        return colorsOption.values;
       }
     }
     return null;
   };
 
-  handleItemColorChange = (color) => {
+  handleCarouselSelection = (selectedIndex, e) => {
+    this.setState({ selectedImageIndex: selectedIndex });
+  };
+
+  handleColorSelection = (color) => {
+    console.log(color);
+    // finds the matching variant based on the color
     const matchingVariant = this.state.product.variants.find(
       (v) => v.title && v.title.includes(color)
     );
     if (matchingVariant) {
       this.setState({ selectedVariant: matchingVariant });
     }
+
+    // Finds the index of the first image with the color in the source file name
+    const imgIndex = this.state.product.images.findIndex((img) =>
+      img.src.toUpperCase().includes(color.toUpperCase())
+    );
+    this.setState({
+      selectedImageIndex: imgIndex >= 0 ? imgIndex : 0,
+    });
   };
 
   getProductWeight = () => {
@@ -84,7 +89,7 @@ class ProductPage extends Component {
   };
 
   render() {
-    const { product, isError, isLoaded } = this.state;
+    const { product, isError, isLoaded, selectedImageIndex } = this.state;
     if (isError) {
       return <div className="error">Error</div>;
     } else if (!isLoaded) {
@@ -106,11 +111,17 @@ class ProductPage extends Component {
           </div>
           <div className="row">
             <div className="col-md-6 order-md-1 mb-2">
-              <ProductImageCarousel product={product} />
+              <ProductImageCarousel
+                product={product}
+                activeIndex={selectedImageIndex}
+              />
             </div>
             <div className="col-md-6 order-md-2 mb-2">
               <h3 className="mb-3">{product.title}</h3>
-              {this.getProductColorsComponent()}
+              <ProductColorSelector
+                colors={this.getProductColors()}
+                onSelect={this.handleColorSelection}
+              />
               <div>
                 {ReactHtmlParser(product.body_html)}
                 {this.getProductWeight()}
