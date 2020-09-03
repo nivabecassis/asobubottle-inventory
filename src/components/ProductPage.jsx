@@ -57,7 +57,6 @@ class ProductPage extends Component {
   };
 
   handleColorSelection = (color) => {
-    console.log(color);
     // finds the matching variant based on the color
     const matchingVariant = this.state.product.variants.find(
       (v) => v.title && v.title.includes(color)
@@ -114,6 +113,7 @@ class ProductPage extends Component {
               <ProductImageCarousel
                 product={product}
                 activeIndex={selectedImageIndex}
+                onSelect={this.handleCarouselSelection}
               />
             </div>
             <div className="col-md-6 order-md-2 mb-2">

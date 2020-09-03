@@ -3,7 +3,7 @@ import { Carousel } from "react-bootstrap";
 
 class ProductImageCarousel extends React.Component {
   render() {
-    const { product, activeIndex, handleSelect } = this.props;
+    const { product, activeIndex, onSelect } = this.props;
 
     // Create the carousel item list
     const carouselItemsList = product.images.map((img, idx) => {
@@ -15,7 +15,7 @@ class ProductImageCarousel extends React.Component {
     });
 
     return (
-      <Carousel activeIndex={activeIndex} onSelect={handleSelect}>
+      <Carousel activeIndex={activeIndex} onSelect={onSelect}>
         {carouselItemsList}
       </Carousel>
     );
