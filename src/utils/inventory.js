@@ -70,6 +70,10 @@ export const calculateUpcomingShipments = (inventory) => {
       }
     }
 
+    if (onHandQty < 0 && shipments.length === 0) {
+      onHandQty = 0;
+    }
+
     results.push({ ...inv, Quantity: onHandQty, Shipments: shipments });
   });
 

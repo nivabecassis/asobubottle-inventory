@@ -98,7 +98,7 @@ class ProductInventory extends Component {
         <div className="btn-group btn-group-toggle mb-4" data-toggle="buttons">
           {this.getLocales()}
         </div>
-        <table className="table">
+        <table className="table table-hover">
           <thead>
             <tr>
               <th scope="col">Color</th>
