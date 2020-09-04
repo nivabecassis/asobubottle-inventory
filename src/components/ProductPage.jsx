@@ -101,7 +101,7 @@ class ProductPage extends Component {
             <Link to="/">
               <button
                 type="button"
-                className="btn btn-outline-primary"
+                className="btn btn-primary"
                 aria-label="Return"
               >
                 All products
