@@ -22,7 +22,7 @@ class App extends React.Component {
   };
 
   getProducts = async () => {
-    const url = "https://localhost:44342/products/";
+    const url = process.env.REACT_APP_ADNART_API_ENDPOINT + "/products/";
     const result = await get(url);
     if (result) {
       this.setState({ products: result.products });

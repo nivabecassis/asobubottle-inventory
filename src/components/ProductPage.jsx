@@ -23,12 +23,13 @@ class ProductPage extends Component {
   };
 
   getProductData = async () => {
-    const baseUrl = "https://localhost:44342";
+    const baseUrl = process.env.REACT_APP_ADNART_API_ENDPOINT;
     const id = this.props.match.params.id;
+    const url = `${baseUrl}/products/${id}`;
 
     try {
       // Get the product details
-      let product = await get(`${baseUrl}/products/${id}`);
+      let product = await get(url);
       product = product.products[0];
       this.setState({
         isLoaded: true,

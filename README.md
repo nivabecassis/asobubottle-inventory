@@ -6,17 +6,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Backend:
 
-- Deploy new API version
 - Pagination
 
 Frontend:
 
 - Deploy React website
-- Pagination
 - Search bar on main page (how to deal with pagination)
+- Proper error message
 - Asobu (orange colored) theme on buttons
 - Loading icon on pages instead of "loading..." text
-- Proper error message
+- Pagination
 
 Shopify:
 
@@ -26,17 +25,13 @@ Shopify:
 
 Backend:
 
-- Store API keys in separate file on backend (+ add to gitignore)
 - Remove specificity for 500 errors on backend
 - Some items are acting weird (eg. SM60)
+- Normalize the naming for lids and other stuff
 
 Shopify:
 
 - Shopify data needs to be normalized (+ add documentated examples that can be referred to for future reference)
-
-Adnart.com:
-
-- Update response handling on products.js page
 
 ## Available Scripts
 
