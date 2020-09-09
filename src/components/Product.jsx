@@ -7,7 +7,7 @@ export class Product extends React.Component {
     return (
       <div className="col mb-4">
         <div className="card mb-4 shadow-sm h-100">
-          <Link to={"/" + product.id} className="product-title">
+          <Link to={"/" + product.id} className="cleanLink">
             <img
               className="card-img-top img-fluid"
               src={product.image.src}

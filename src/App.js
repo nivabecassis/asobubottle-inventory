@@ -30,21 +30,16 @@ class App extends React.Component {
   };
 
   render() {
+    const { products } = this.state;
     return (
       <div className="App">
-        <React.Fragment>
-          <Header />
-          <div className="container-xl py-4">
-            <Switch>
-              <Route path="/:id" exact component={ProductPage} />
-              <Route
-                exact
-                path="/"
-                children={<Products products={this.state.products} />}
-              />
-            </Switch>
-          </div>
-        </React.Fragment>
+        <Header products={products} />
+        <div className="container-xl py-4">
+          <Switch>
+            <Route path="/:id" exact component={ProductPage} />
+            <Route exact path="/" children={<Products products={products} />} />
+          </Switch>
+        </div>
       </div>
     );
   }
