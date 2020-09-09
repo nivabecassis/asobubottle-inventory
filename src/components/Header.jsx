@@ -8,7 +8,7 @@ class Header extends Component {
     const { products } = this.props;
 
     return (
-      <nav className="navbar navbar-light bg-light">
+      <nav className="navbar navbar-light bg-light headerNav">
         <div>
           <a className="navbar-brand" href=".">
             <img src={logoUri} alt="Adnart company logo"></img>
