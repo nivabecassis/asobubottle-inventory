@@ -15,6 +15,8 @@ class ProductPage extends Component {
       isError: false,
       selectedVariant: null,
       selectedImageIndex: 0,
+      selectedLocale: null,
+      localeInventory: [],
     };
   }
 
@@ -29,7 +31,6 @@ class ProductPage extends Component {
       this.getProductData();
       console.log("Updating...");
     }
-    console.log(prevProductId, productId);
   };
 
   getProductData = async () => {
@@ -39,12 +40,19 @@ class ProductPage extends Component {
 
     try {
       // Get the product details
-      let product = await get(url);
-      product = product.products[0];
+      const result = await get(url);
+      const product = result.products[0];
+
+      // Get the first inventory in the list as the default selected locale
+      const selectedLocale = product.inventory[0].Locale.Code;
+      const localeInventory = [...product.inventory[0].Variations];
+
       this.setState({
         isLoaded: true,
         product,
         selectedVariant: product.variants[0],
+        selectedLocale,
+        localeInventory,
       });
     } catch (err) {
       this.setState({ isError: true });
@@ -98,8 +106,46 @@ class ProductPage extends Component {
     );
   };
 
+  handleLocaleChange = (e) => {
+    const { product, selectedLocale } = this.state;
+    const newLocaleCode = e.currentTarget.value;
+
+    if (newLocaleCode !== selectedLocale) {
+      // Find the matching inventory data that corresponds with the new locale
+      const matchingInventory = [
+        ...product.inventory.find((inv) => inv.Locale.Code === newLocaleCode)
+          .Variations,
+      ];
+      this.setState({
+        selectedLocale: newLocaleCode,
+        localeInventory: matchingInventory,
+      });
+    }
+  };
+
+  getAvailableLocales = () => {
+    const { product } = this.state;
+    let locales = [];
+
+    if (!!product) {
+      // Get each available locale for the current product
+      product.inventory.forEach((inv) => {
+        locales.push({ ...inv.Locale });
+      });
+    }
+
+    return locales;
+  };
+
   render() {
-    const { product, isError, isLoaded, selectedImageIndex } = this.state;
+    const {
+      product,
+      isError,
+      isLoaded,
+      selectedImageIndex,
+      selectedLocale,
+      localeInventory,
+    } = this.state;
     if (isError) {
       return <div className="error">Error</div>;
     } else if (!isLoaded) {
@@ -138,7 +184,13 @@ class ProductPage extends Component {
                 {this.renderProductWeight()}
               </div>
               <hr />
-              <ProductInventory product={product} type="primary" />
+              <ProductInventory
+                selectedLocale={selectedLocale}
+                inventory={localeInventory}
+                locales={this.getAvailableLocales()}
+                onLocaleChange={this.handleLocaleChange}
+                type="primary"
+              />
             </div>
           </div>
         </div>

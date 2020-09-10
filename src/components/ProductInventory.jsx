@@ -6,43 +6,20 @@ import {
 } from "../utils/inventory";
 
 class ProductInventory extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      // Default selected locale is NA
-      // selectedLocale: props.product.inventory[0].Locale.Code,
-      // localeInventory: [...props.product.inventory[0].Variations],
-      selectedLocale: null,
-      localeInventory: [],
-    };
-  }
-
-  handleLocaleChange = (e) => {
-    // There is a bug related to onChange that's why I'm adding this check
-    const newValue = e.currentTarget.value;
-
-    if (newValue !== this.state.selectedLocale) {
-      // Find the matching inventory data that corresponds with the new locale
-      const inventory = this.props.product.inventory.find(
-        (i) => i.Locale.Code === newValue
-      );
-
-      this.setState({
-        selectedLocale: e.currentTarget.value,
-        localeInventory: [...inventory.Variations],
-      });
-    }
-  };
-
+  /**
+   * Comparing the selected locale code (eg. NA or EU) to the
+   * specified locale code.
+   *
+   * @param {String} locale The locale code eg. NA or EU
+   */
   isSelectedLocale = (locale) => {
-    return this.state.selectedLocale === locale;
+    return this.props.selectedLocale === locale;
   };
 
   getLocales = () => {
-    const { product, type } = this.props;
+    const { locales, onLocaleChange, type } = this.props;
 
-    return product.inventory.map((inv, index) => {
-      const locale = inv.Locale;
+    return locales.map((locale) => {
       return (
         // Create a radio option for each inventory region
         <label
@@ -57,7 +34,7 @@ class ProductInventory extends Component {
             name="regions"
             id={locale.Code}
             checked={this.isSelectedLocale(locale.Code)}
-            onClick={this.handleLocaleChange}
+            onClick={onLocaleChange}
             onChange={(e) => null} // Swallowing the event because there is a bug with onChange
             value={locale.Code}
           />
@@ -68,10 +45,10 @@ class ProductInventory extends Component {
   };
 
   getInventoryTableData = () => {
-    const localeInventory = [...this.state.localeInventory];
+    const inventory = [...this.props.inventory];
 
     // Adjust current stock with upcoming shipments
-    let shipmentsList = calculateUpcomingShipments(localeInventory);
+    let shipmentsList = calculateUpcomingShipments(inventory);
 
     // Make the data single dimension
     shipmentsList = flattenInventoryData(shipmentsList);
