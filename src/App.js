@@ -36,8 +36,8 @@ class App extends React.Component {
         <Header products={products} />
         <div className="container-xl py-4">
           <Switch>
-            <Route path="/:id" exact component={ProductPage} />
-            <Route exact path="/" children={<Products products={products} />} />
+            <Route path="/:id" component={ProductPage} />
+            <Route path="/" children={<Products products={products} />} />
           </Switch>
         </div>
       </div>

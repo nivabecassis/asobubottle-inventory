@@ -10,8 +10,10 @@ class ProductInventory extends Component {
     super(props);
     this.state = {
       // Default selected locale is NA
-      selectedLocale: props.product.inventory[0].Locale.Code,
-      localeInventory: [...props.product.inventory[0].Variations],
+      // selectedLocale: props.product.inventory[0].Locale.Code,
+      // localeInventory: [...props.product.inventory[0].Variations],
+      selectedLocale: null,
+      localeInventory: [],
     };
   }
 

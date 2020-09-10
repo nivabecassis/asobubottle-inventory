@@ -30,11 +30,7 @@ class Search extends Component {
     }
 
     this.setState({ suggestions, text: value });
-
-    console.log(e, value, suggestions);
   };
-
-  handleSubmit = (e) => {};
 
   handleBlur = () => {
     this.setState({ suggestions: [] });

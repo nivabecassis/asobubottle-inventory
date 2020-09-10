@@ -22,6 +22,16 @@ class ProductPage extends Component {
     this.getProductData();
   };
 
+  componentDidUpdate = (prevProps) => {
+    const productId = this.props.match.params.id;
+    const prevProductId = prevProps.match.params.id;
+    if (prevProductId !== productId) {
+      this.getProductData();
+      console.log("Updating...");
+    }
+    console.log(prevProductId, productId);
+  };
+
   getProductData = async () => {
     const baseUrl = process.env.REACT_APP_ADNART_API_ENDPOINT;
     const id = this.props.match.params.id;
@@ -41,7 +51,7 @@ class ProductPage extends Component {
     }
   };
 
-  getProductColors = () => {
+  renderProductColors = () => {
     const { product } = this.state;
     if (product) {
       // Get the option that shows the colors
@@ -75,7 +85,7 @@ class ProductPage extends Component {
     });
   };
 
-  getProductWeight = () => {
+  renderProductWeight = () => {
     // Only show weight if it is provided
     const { weight, weight_unit } = this.state.selectedVariant;
     if (!weight) return null;
@@ -120,12 +130,12 @@ class ProductPage extends Component {
             <div className="col-md-6 order-md-2 mb-2">
               <h3 className="mb-3">{product.title}</h3>
               <ProductColorSelector
-                colors={this.getProductColors()}
+                colors={this.renderProductColors()}
                 onSelect={this.handleColorSelection}
               />
               <div>
                 {ReactHtmlParser(product.body_html)}
-                {this.getProductWeight()}
+                {this.renderProductWeight()}
               </div>
               <hr />
               <ProductInventory product={product} type="primary" />
