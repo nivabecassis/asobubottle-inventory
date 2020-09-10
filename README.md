@@ -1,37 +1,8 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Known Issues
+## Issues
 
-### Missing features:
-
-Backend:
-
-- Pagination
-
-Frontend:
-
-- Deploy React website
-- Search bar on main page (how to deal with pagination)
-- Proper error message
-- Asobu (orange colored) theme on buttons
-- Loading icon on pages instead of "loading..." text
-- Pagination
-
-Shopify:
-
-- Link on asobubottle.com page that redirects to this website
-
-### Errors that need to be fixed:
-
-Backend:
-
-- Remove specificity for 500 errors on backend
-- Some items are acting weird (eg. SM60)
-- Normalize the naming for lids and other stuff
-
-Shopify:
-
-- Shopify data needs to be normalized (+ add documentated examples that can be referred to for future reference)
+See github page for list of [issues](https://github.com/nivabecassis/asobubottle-inventory/issues)
 
 ## Available Scripts
 
