@@ -2,23 +2,18 @@ import React, { Component } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
 class ProductColorSelector extends Component {
-  state = {
-    selectedColor: null,
-  };
-
-  handleSelect = (eventKey, event) => {
-    this.setState({ selectedColor: event.target.innerText });
-    this.props.onSelect(event.target.innerText);
-  };
-
   render() {
-    const { colors } = this.props;
+    const { product, selectedColor, onSelect } = this.props;
 
-    const dropdownItemsList = colors.map((color, idx) => {
+    const dropdownItemsList = product.variants.map((variant, idx) => {
       // Create the dropdown item for each color
       return (
-        <Dropdown.Item key={color} as="button" onSelect={this.handleSelect}>
-          {color}
+        <Dropdown.Item
+          key={variant.id}
+          as="button"
+          onSelect={() => onSelect(variant.id)}
+        >
+          {variant.option1}
         </Dropdown.Item>
       );
     });
@@ -26,7 +21,7 @@ class ProductColorSelector extends Component {
     return (
       <DropdownButton
         id="productColorSelector"
-        title={this.state.selectedColor || "Color"}
+        title={selectedColor || "Color"}
         variant="primary"
         className="mb-2"
       >

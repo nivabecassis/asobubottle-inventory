@@ -13,10 +13,10 @@ class ProductPage extends Component {
       product: null,
       isLoaded: false,
       isError: false,
-      selectedVariant: null,
       selectedImageIndex: 0,
       selectedLocale: null,
       localeInventory: [],
+      selectedVariant: null,
     };
   }
 
@@ -47,49 +47,34 @@ class ProductPage extends Component {
       const selectedLocale = product.inventory[0].Locale.Code;
       const localeInventory = [...product.inventory[0].Variations];
 
+      const selectedVariant = { ...product.variants[0] };
+
       this.setState({
         isLoaded: true,
         product,
-        selectedVariant: product.variants[0],
         selectedLocale,
         localeInventory,
+        selectedVariant,
       });
     } catch (err) {
       this.setState({ isError: true });
     }
   };
 
-  renderProductColors = () => {
-    const { product } = this.state;
-    if (product) {
-      // Get the option that shows the colors
-      const colorsOption = product.options.find((o) => o.name === "Color");
-      if (colorsOption) {
-        return colorsOption.values;
-      }
-    }
-    return null;
-  };
-
   handleCarouselSelection = (selectedIndex, e) => {
+    console.log("Handler called!");
     this.setState({ selectedImageIndex: selectedIndex });
   };
 
-  handleColorSelection = (color) => {
-    // finds the matching variant based on the color
+  handleColorSelection = (variantId) => {
+    // Find the matching variant and cache its data
     const matchingVariant = this.state.product.variants.find(
-      (v) => v.title && v.title.includes(color)
+      (variant) => variant.id === variantId
     );
-    if (matchingVariant) {
-      this.setState({ selectedVariant: matchingVariant });
-    }
-
-    // Finds the index of the first image with the color in the source file name
-    const imgIndex = this.state.product.images.findIndex((img) =>
-      img.src.toUpperCase().includes(color.toUpperCase())
-    );
+    // Setting the image index to -1 indicates manual user color selection
     this.setState({
-      selectedImageIndex: imgIndex >= 0 ? imgIndex : 0,
+      selectedVariant: matchingVariant,
+      selectedImageIndex: -1,
     });
   };
 
@@ -145,6 +130,7 @@ class ProductPage extends Component {
       selectedImageIndex,
       selectedLocale,
       localeInventory,
+      selectedVariant,
     } = this.state;
     if (isError) {
       return <div className="error">Error</div>;
@@ -170,13 +156,15 @@ class ProductPage extends Component {
               <ProductImageCarousel
                 product={product}
                 activeIndex={selectedImageIndex}
+                selectedVariant={selectedVariant}
                 onSelect={this.handleCarouselSelection}
               />
             </div>
             <div className="col-md-6 order-md-2 mb-2">
               <h3 className="mb-3">{product.title}</h3>
               <ProductColorSelector
-                colors={this.renderProductColors()}
+                product={product}
+                selectedColor={selectedVariant.option1}
                 onSelect={this.handleColorSelection}
               />
               <div>
