@@ -1,0 +1,13 @@
+.card-title {
+  font-size: 1.17647em;
+  text-align: left;
+}
+
+.col {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.card {
+  border: none;
+}
