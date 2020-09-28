@@ -5,6 +5,8 @@ import { get } from "../web/ajax";
 import ProductImageCarousel from "./ProductImageCarousel";
 import ProductInventory from "./ProductInventory";
 import ProductColorSelector from "./ProductColorSelector";
+import PageLoading from "./PageLoading";
+import "../styles/ProductPage.css";
 
 class ProductPage extends Component {
   constructor(props) {
@@ -28,8 +30,8 @@ class ProductPage extends Component {
     const productId = this.props.match.params.id;
     const prevProductId = prevProps.match.params.id;
     if (prevProductId !== productId) {
+      this.setState({ isLoaded: false });
       this.getProductData();
-      console.log("Updating...");
     }
   };
 
@@ -62,7 +64,6 @@ class ProductPage extends Component {
   };
 
   handleCarouselSelection = (selectedIndex, e) => {
-    console.log("Handler called!");
     this.setState({ selectedImageIndex: selectedIndex });
   };
 
@@ -132,13 +133,19 @@ class ProductPage extends Component {
       localeInventory,
       selectedVariant,
     } = this.state;
+
+    let content;
     if (isError) {
-      return <div className="error">Error</div>;
+      content = <div className="error">Error</div>;
     } else if (!isLoaded) {
-      return <div>Loading...</div>;
+      content = (
+        <div className="product-loading">
+          <PageLoading role="item-load-status" />
+        </div>
+      );
     } else {
       // Product data is finished loaded
-      return (
+      content = (
         <div className="text-left">
           <div className="mb-3">
             <Link to="/">
@@ -184,6 +191,8 @@ class ProductPage extends Component {
         </div>
       );
     }
+
+    return content;
   }
 }
 

@@ -1,0 +1,9 @@
+.product-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* For now this kinda works, 
+  ideally should find a better solution */
+  height: 70vh;
+}
