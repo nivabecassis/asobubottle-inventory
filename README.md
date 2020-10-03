@@ -1,5 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## CSS/SCSS
+
+If changes are made to `/src/scss/custom-theme.scss` run the following command:
+
+`node-sass .\src\scss\custom-theme.scss ./src/css/custom-theme.css`
+
+Note: node-sass must be installed globally for this to work.
+
 ## Issues
 
 See github page for list of [issues](https://github.com/nivabecassis/asobubottle-inventory/issues)
