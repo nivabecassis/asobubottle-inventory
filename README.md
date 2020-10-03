@@ -2,6 +2,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## CSS/SCSS
 
+If cloning this repo on a new PC don't forget to compile the custom scss file. See instructions below.
+
 If changes are made to `/src/scss/custom-theme.scss` run the following command:
 
 `node-sass .\src\scss\custom-theme.scss ./src/css/custom-theme.css`
