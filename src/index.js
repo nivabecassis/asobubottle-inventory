@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./css/custom-theme.css";
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";

@@ -1,0 +1,11 @@
+/* import the necessary Bootstrap files */
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+$asobu: #f9800f;
+
+$theme-colors: (
+  "asobu": $asobu,
+);
+
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";

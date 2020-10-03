@@ -22,7 +22,7 @@ class ProductColorSelector extends Component {
       <DropdownButton
         id="productColorSelector"
         title={selectedColor || "Color"}
-        variant="primary"
+        variant="asobu"
         className="mb-2"
       >
         {dropdownItemsList}

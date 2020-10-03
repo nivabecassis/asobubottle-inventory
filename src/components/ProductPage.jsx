@@ -151,7 +151,7 @@ class ProductPage extends Component {
             <Link to="/">
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-asobu"
                 aria-label="Return"
               >
                 All products
@@ -184,7 +184,7 @@ class ProductPage extends Component {
                 inventory={localeInventory}
                 locales={this.getAvailableLocales()}
                 onLocaleChange={this.handleLocaleChange}
-                type="primary"
+                type="asobu"
               />
             </div>
           </div>
