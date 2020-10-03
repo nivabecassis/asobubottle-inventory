@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
-import { get } from "../web/ajax";
+import { get, readResult } from "../web/ajax";
 import ProductImageCarousel from "./ProductImageCarousel";
 import ProductInventory from "./ProductInventory";
 import ProductColorSelector from "./ProductColorSelector";
+import PageError from "./PageError";
 import PageLoading from "./PageLoading";
 import "../styles/ProductPage.css";
 
@@ -19,6 +20,7 @@ class ProductPage extends Component {
       selectedLocale: null,
       localeInventory: [],
       selectedVariant: null,
+      productFetchResult: null,
     };
   }
 
@@ -40,10 +42,18 @@ class ProductPage extends Component {
     const id = this.props.match.params.id;
     const url = `${baseUrl}/products/${id}`;
 
+    let productFetchResult;
+
     try {
       // Get the product details
       const result = await get(url);
-      const product = result.products[0];
+      productFetchResult = await readResult(result);
+      console.log(productFetchResult);
+      if (!productFetchResult.success) {
+        throw new Error("GET request failed");
+      }
+
+      const product = productFetchResult.products[0];
 
       // Get the first inventory in the list as the default selected locale
       const selectedLocale = product.inventory[0].Locale.Code;
@@ -57,9 +67,11 @@ class ProductPage extends Component {
         selectedLocale,
         localeInventory,
         selectedVariant,
+        productFetchResult,
       });
     } catch (err) {
-      this.setState({ isError: true });
+      console.log(err);
+      this.setState({ isError: true, productFetchResult });
     }
   };
 
@@ -123,6 +135,32 @@ class ProductPage extends Component {
     return locales;
   };
 
+  getErrorInfo = () => {
+    const { product, productFetchResult } = this.state;
+    const { match } = this.props;
+    const productId = !!product ? product.title : match.params.id;
+    let status, message;
+
+    if (
+      !!productFetchResult &&
+      !!productFetchResult.status &&
+      !!productFetchResult.message
+    ) {
+      status = productFetchResult.status;
+      message = productFetchResult.message;
+    }
+
+    const errorContent = (
+      <p>
+        Error - {`${status} - ${message}`}
+        <br />
+        Please report this issue! Product ID: {productId}
+      </p>
+    );
+
+    return <PageError title="Error" content={errorContent} />;
+  };
+
   render() {
     const {
       product,
@@ -136,7 +174,7 @@ class ProductPage extends Component {
 
     let content;
     if (isError) {
-      content = <div className="error">Error</div>;
+      content = this.getErrorInfo();
     } else if (!isLoaded) {
       content = (
         <div className="product-loading">

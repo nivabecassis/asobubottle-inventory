@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class PageError extends Component {
   render() {
-    const heading = this.props.header || "Error";
+    const heading = this.props.title || "Error";
     const content =
       this.props.content ||
       "Something went wrong :( \n Please report this issue";

@@ -23,8 +23,9 @@ class Layout extends Component {
   getProducts = async () => {
     const url = process.env.REACT_APP_ADNART_API_ENDPOINT + "/products/";
     const result = await get(url);
-    if (result) {
-      this.setState({ products: result.products });
+    const jsonResult = await result.json();
+    if (jsonResult) {
+      this.setState({ products: jsonResult.products });
     }
   };
 
