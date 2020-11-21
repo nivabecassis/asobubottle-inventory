@@ -1,0 +1,23 @@
+.carousel-item {
+  margin-bottom: 40px;
+}
+
+.carousel-item-image {
+  height: 500px;
+}
+
+@media only screen and (max-width: 1100px) {
+  [class*="carousel-item-image"] {
+    height: 500px;
+  }
+}
+@media only screen and (max-width: 1000px) {
+  [class*="carousel-item-image"] {
+    height: 400px;
+  }
+}
+@media only screen and (max-width: 800px) {
+  [class*="carousel-item-image"] {
+    height: 350px;
+  }
+}

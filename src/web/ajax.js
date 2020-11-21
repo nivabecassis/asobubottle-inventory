@@ -26,7 +26,6 @@ export async function readResult(response) {
 
     const json = await response.json();
 
-    console.log(response, json);
     if (!response.ok) {
       result.message = json.Message || "unknown error";
     } else {

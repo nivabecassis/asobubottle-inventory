@@ -16,7 +16,7 @@ class ProductPage extends Component {
       product: null,
       isLoaded: false,
       isError: false,
-      selectedImageIndex: 0,
+      activeIndex: 0,
       selectedLocale: null,
       localeInventory: [],
       selectedVariant: null,
@@ -48,7 +48,6 @@ class ProductPage extends Component {
       // Get the product details
       const result = await get(url);
       productFetchResult = await readResult(result);
-      console.log(productFetchResult);
       if (!productFetchResult.success) {
         throw new Error("GET request failed");
       }
@@ -70,13 +69,12 @@ class ProductPage extends Component {
         productFetchResult,
       });
     } catch (err) {
-      console.log(err);
       this.setState({ isError: true, productFetchResult });
     }
   };
 
   handleCarouselSelection = (selectedIndex, e) => {
-    this.setState({ selectedImageIndex: selectedIndex });
+    this.setState({ activeIndex: selectedIndex });
   };
 
   handleColorSelection = (variantId) => {
@@ -87,7 +85,7 @@ class ProductPage extends Component {
     // Setting the image index to -1 indicates manual user color selection
     this.setState({
       selectedVariant: matchingVariant,
-      selectedImageIndex: -1,
+      activeIndex: -1,
     });
   };
 
@@ -166,7 +164,7 @@ class ProductPage extends Component {
       product,
       isError,
       isLoaded,
-      selectedImageIndex,
+      activeIndex,
       selectedLocale,
       localeInventory,
       selectedVariant,
@@ -200,8 +198,8 @@ class ProductPage extends Component {
             <div className="col-md-6 order-md-1 mb-2">
               <ProductImageCarousel
                 product={product}
-                activeIndex={selectedImageIndex}
-                selectedVariant={selectedVariant}
+                activeIndex={activeIndex}
+                selectedVariantImageId={selectedVariant.image_id}
                 onSelect={this.handleCarouselSelection}
               />
             </div>
