@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
+import "../scss/ProductColorSelector.scss";
+
 class ProductColorSelector extends Component {
   render() {
     const { product, selectedColor, onSelect } = this.props;

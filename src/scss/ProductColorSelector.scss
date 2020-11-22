@@ -1,0 +1,10 @@
+@import "../scss/custom-theme.scss";
+
+.dropdown-item:active {
+  background-color: $asobu !important;
+}
+
+.dropdown-item:focus {
+  border: none !important;
+  outline: 0 !important;
+}
