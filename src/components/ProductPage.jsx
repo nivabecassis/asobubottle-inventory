@@ -7,7 +7,7 @@ import ProductInventory from "./ProductInventory";
 import ProductColorSelector from "./ProductColorSelector";
 import PageError from "./PageError";
 import PageLoading from "./PageLoading";
-import "../styles/ProductPage.css";
+import "../styles/Loading.css";
 
 class ProductPage extends Component {
   constructor(props) {
@@ -175,7 +175,7 @@ class ProductPage extends Component {
       content = this.getErrorInfo();
     } else if (!isLoaded) {
       content = (
-        <div className="product-loading">
+        <div className="center-loading">
           <PageLoading role="item-load-status" />
         </div>
       );
